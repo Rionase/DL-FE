@@ -3,7 +3,7 @@ import fetchApi from "../lib/api/FetchApi";
 
 export const useListModelStore = defineStore("listModel", {
     state: () => ({
-        data: []
+        data: [],
     }),
     actions: {
         async getListModel() {
@@ -12,6 +12,16 @@ export const useListModelStore = defineStore("listModel", {
                     method: "GET",
                 });
                 this.data = response.files.reverse()         
+            } catch (error) {
+                throw error
+            }
+        },
+        async getModelsData() {
+            try {
+                const response = await fetchApi("/ai/get-model-data", {
+                    method: "GET",
+                });
+                this.data = response.reverse()         
             } catch (error) {
                 throw error
             }

@@ -3,12 +3,19 @@ import LoginPage from "../page/LoginPage.vue"; // Sesuaikan lokasi file
 import PredictPage from "../page/PredictPage.vue";
 import PrepocessingPage from "../page/PrepocessingPage.vue";
 import WithRoles from "../middleware/WithRoles"
+import TrainingPage from "../page/TrainingPage.vue";
+import SignUpPage from "../page/SignUpPage.vue";
 
 const routes = [
     {
         path: "/login",
         name: "Login",
         component: LoginPage,
+    },
+    {
+        path: "/sign-up",
+        name: "Sign Up",
+        component: SignUpPage
     },
     {
         path: "/predict",
@@ -24,6 +31,16 @@ const routes = [
         path: "/prepocessing",
         name: "prepocessing",
         component: PrepocessingPage,
+        meta: {
+			middleware: [
+				{funcName: WithRoles, param: ["user", "admin"]},
+			],
+		},
+    },
+    {
+        path: "/train",
+        name: "train",
+        component: TrainingPage,
         meta: {
 			middleware: [
 				{funcName: WithRoles, param: ["user", "admin"]},

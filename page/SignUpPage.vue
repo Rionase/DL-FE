@@ -24,19 +24,32 @@
                             class="text-h3 text-center font-weight-bold mb-1"
                             style="color: #388e3c;"
                         >
-                            Login
+                            Register
                         </v-card-title>
                         <v-card-subtitle
                             class="text-center mb-4"
                             style="color: #757575"
                         >
-                            Enter your details to log in to your account
+                            Fill in the data to register as new user
                         </v-card-subtitle>
                         <v-form ref="formRef">
                             <v-text-field
                                 v-model="email"
                                 :error-messages="email_error_message"
                                 placeholder="Email"
+                                type="email"
+                                variant="outlined"
+                                color="grey"
+                                prepend-inner-icon="mdi-at"
+                                class="mb-4"
+                                required
+                                width="400"
+                                single-line
+                            />
+                            <v-text-field
+                                v-model="username"
+                                :error-messages="username_error_message"
+                                placeholder="Username"
                                 type="email"
                                 variant="outlined"
                                 color="grey"
@@ -58,30 +71,42 @@
                                 required
                                 single-line
                             />
+                            <v-text-field
+                                v-model="confirmPassword"
+                                :error-messages="confirm_password_error_message"
+                                placeholder="Confirm Password"
+                                type="password"
+                                variant="outlined"
+                                color="grey"
+                                prepend-inner-icon="mdi-lock"
+                                class="mb-4"
+                                required
+                                single-line
+                            />
                             <v-btn
                                 :disabled="!isFormValid"
                                 block
                                 color="primary"
                                 class="mt-3 py-3"
                                 elevation="2"
-                                @click="handleClickLogin"
+                                @click="handleClickRegister"
                                 height="50"
                             >
-                                Login
+                                REGISTER
                             </v-btn>
                         </v-form>
                         <v-divider class="my-4"></v-divider>
                         <div class="text-center">
                             <span style="color: #757575"
-                                >Don't have an account?</span
+                                >Already have an account?</span
                             >
                             <v-btn
                                 color="primary"
                                 class="ml-1"
-                                @click="handleClickSignUp"
+                                @click="handleClickLogin"
                                 variant="text"
                             >
-                                Sign up now
+                                Login
                             </v-btn>
                         </div>
                     </div>
@@ -100,10 +125,14 @@ import router from "../router";
 
 // State
 const email = ref("");
+const username = ref("");
 const password = ref("");
+const confirmPassword = ref("");
 
 const email_error_message = ref("");
+const username_error_message = ref("")
 const password_error_message = ref("");
+const confirm_password_error_message = ref("")
 
 const authStore = useAuthStore();
 const snackbarStore = useSnackbarStore();
@@ -119,29 +148,47 @@ watch(email, (newValue) => {
     }
 });
 
-// Watcher for password validation
-watch(password, (newValue) => {
-    if (!newValue) {
+watch([password, confirmPassword], ([newpassword, newconfirmPassword], [prevpassword, prevconfirmPassword]) => {
+    if (!newpassword) {
         password_error_message.value = "";
-    } else if (newValue.length < 6) {
+    } else if (newpassword.length < 6) {
         password_error_message.value = "Password must be at least 6 characters";
     } else {
         password_error_message.value = "";
+    }
+
+    if (!newconfirmPassword) {
+        confirm_password_error_message.value = ""
+    } else if (newconfirmPassword != newpassword) {
+        confirm_password_error_message.value = "Confirm password and Password should be identical"
+    } else {
+        confirm_password_error_message.value = ""
+    }
+})
+
+watch(username, (newValue) => {
+    if (!newValue) {
+        username_error_message.value = "";
+    } else if (newValue.length < 6) {
+        username_error_message.value = "Username must be at least 6 characters";
+    } else {
+        username_error_message.value = "";
     }
 });
 
 // Form validation status
 const isFormValid = ref(false);
-watch([email_error_message, password_error_message], () => {
+watch([email_error_message, password_error_message, confirm_password_error_message, username_error_message], () => {
     isFormValid.value =
-        !email_error_message.value && !password_error_message.value && email.value && password.value;
+        !email_error_message.value && !password_error_message.value && !confirm_password_error_message.value && !username_error_message.value && email.value && password.value && username.value && confirmPassword.value;
 });
 
-const handleClickLogin = async () => {
+const handleClickRegister = async () => {
     try {
-        await authStore.login({
+        await authStore.signup({
             email: email.value,
-            password: password.value
+            password: password.value,
+            username: username.value
         })
         router.push("/predict")
     } catch (err) {
@@ -152,8 +199,8 @@ const handleClickLogin = async () => {
     }
 }
 
-const handleClickSignUp = () => {
-    router.push('/sign-up')
+const handleClickLogin = () => {
+    router.push('/login')
 }
 
 </script>

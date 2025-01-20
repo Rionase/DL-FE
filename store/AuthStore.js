@@ -23,6 +23,22 @@ export const useAuthStore = defineStore("auth", {
 				throw error;
 			}
 		},
+		async signup({ email, password, username }) {
+			try {
+				const response = await fetchApi("/auth/register", {
+					method: "POST",
+					data: {
+						email: email,
+						password: password,
+						username: username,
+						role: "user"
+					},
+				});                
+				await this.login({ email: email, password: password })
+			} catch (error) {
+				throw error;
+			}
+		},
 		logout() {
 			localStorage.removeItem("jwt_token");
 

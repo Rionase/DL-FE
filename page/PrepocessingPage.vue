@@ -189,7 +189,7 @@
         v-model="overlay"
         style="display: flex; align-items: center; justify-content: center"
     >
-        <img :src="imageUrl" alt="not-found" />
+        <img :src="imageUrl" alt="not-found" style="max-width: 80vw; max-height: 80vh;" />
     </v-overlay>
 
     <v-overlay
@@ -390,6 +390,7 @@ const handleUploadFileOrganic = async () => {
         formData.append("tipe_sampah", "organik");
         await unProcessedImageStore.uploadImage(formData);
         uploadOrganicOverlay.value = false;
+        uploadOrganicFile.value = []
     } else {
         snackbarStore.showSnackbar({
             message:
@@ -418,6 +419,7 @@ const handleUploadFileUnorganic = async () => {
         formData.append("tipe_sampah", "anorganik");
         await unProcessedImageStore.uploadImage(formData);
         uploadUnorganicOverlay.value = false;
+        uploadUnorganicFile.value = []
     } else {
         snackbarStore.showSnackbar({
             message:
@@ -444,12 +446,14 @@ const handlePrepocessingImage = async () => {
                 timeout: 10000,
                 type: "warn"
             })
+            prepocessingOverlay.value = false
         } else {
             snackbarStore.showSnackbar({
                 message: "Successfully prepocessing",
                 timeout: 5000,
                 type: "success"
             })
+            prepocessingOverlay.value = false   
         }
     } catch (err) {
         throw err

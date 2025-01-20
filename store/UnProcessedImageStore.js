@@ -3,7 +3,7 @@ import fetchApi from "../lib/api/FetchApi";
 import { useSnackbarStore } from "./SnackbarStore";
 
 export const useUnProcessedImageStore = defineStore(
-    "unProcessedImageStore.js",
+    "unProcessedImageStore",
     {
         state: () => ({
             organic: [],

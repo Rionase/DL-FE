@@ -44,6 +44,16 @@ export const useAiPredictionStore = defineStore("aiPrediction", {
             } catch (err) {
                 throw err
             }
+        },
+        async train() {
+            try {
+                const response = await fetchApi("/ai/train", {
+                    method: "POST",
+                })
+                return response
+            } catch (err) {
+                throw err
+            }
         }
     }
 })
