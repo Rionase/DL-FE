@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginPage from "../page/LoginPage.vue"; // Sesuaikan lokasi file
 import PredictPage from "../page/PredictPage.vue";
+import PrepocessingPage from "../page/PrepocessingPage.vue";
 import WithRoles from "../middleware/WithRoles"
 
 const routes = [
@@ -13,6 +14,16 @@ const routes = [
         path: "/predict",
         name: "Predict",
         component: PredictPage,
+        meta: {
+			middleware: [
+				{funcName: WithRoles, param: ["user", "admin"]},
+			],
+		},
+    },
+    {
+        path: "/prepocessing",
+        name: "prepocessing",
+        component: PrepocessingPage,
         meta: {
 			middleware: [
 				{funcName: WithRoles, param: ["user", "admin"]},

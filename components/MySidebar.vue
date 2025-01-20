@@ -34,27 +34,30 @@
                             :title="item.title"
                             :value="item.value"
                             :active="item.value == activeAt"
-                            style=""
+                            @click="handleClickChangeNav(item.url)"
                         ></v-list-item>
                     </template>
                 </v-list>
 
                 <template v-slot:append>
                     <div class="pa-2 mb-5">
-                        <v-btn block color="primary" @click="handleClickLogout"> Logout </v-btn>
+                        <v-btn block color="primary" @click="handleClickLogout">
+                            Logout
+                        </v-btn>
                     </div>
                 </template>
             </v-navigation-drawer>
-            <v-main style="min-height: 100vh;">
-				<slot></slot>
-			</v-main>
+            <v-main style="min-height: 100vh">
+                <slot></slot>
+            </v-main>
         </v-layout>
     </v-card>
 </template>
 
 <script setup>
-import { useAuthStore } from '../store/AuthStore';
-import { onMounted } from 'vue';
+import router from "../router";
+import { useAuthStore } from "../store/AuthStore";
+import { onMounted } from "vue";
 
 defineProps({
     activeAt: {
@@ -64,16 +67,23 @@ defineProps({
 });
 
 const siderbarList = [
-    { icon: "mdi-camera-iris", title: "AI IMAGE PREDICTION", value: "predict" },
+    {
+        icon: "mdi-camera-iris",
+        title: "AI IMAGE PREDICTION",
+        value: "predict",
+        url: "/predict",
+    },
     {
         icon: "mdi-database-plus",
         title: "PREPOCESSING DATA",
         value: "prepocessing",
+        url: "/prepocessing",
     },
     {
         icon: "mdi-chart-donut-variant",
         title: "TRAINING MODEL",
         value: "train",
+        url: "/train",
     },
 ];
 
@@ -81,15 +91,19 @@ const authStore = useAuthStore();
 
 onMounted(async () => {
     try {
-        if ( !authStore.email || !authStore.role || !authStore.username ) {
-            await authStore.getMe()
+        if (!authStore.email || !authStore.role || !authStore.username) {
+            await authStore.getMe();
         }
     } catch (err) {
-        throw err
+        throw err;
     }
-})
+});
+
+const handleClickChangeNav = (url) => {
+    router.push(url)
+}
 
 const handleClickLogout = () => {
-    authStore.logout()
-}
+    authStore.logout();
+};
 </script>

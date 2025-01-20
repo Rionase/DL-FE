@@ -34,6 +34,16 @@ export const useAiPredictionStore = defineStore("aiPrediction", {
             } catch (err) {
                 throw err
             }
+        },
+        async prepocessing() {
+            try {
+                const response = await fetchApi("/ai/prepocessing", {
+                    method: "POST",
+                })
+                return response
+            } catch (err) {
+                throw err
+            }
         }
     }
 })
