@@ -446,6 +446,7 @@ const handlePrepocessingImage = async () => {
                 timeout: 10000,
                 type: "warn"
             })
+            await unProcessedImageStore.getUnProcessedImage();
             prepocessingOverlay.value = false
         } else {
             snackbarStore.showSnackbar({
@@ -453,6 +454,7 @@ const handlePrepocessingImage = async () => {
                 timeout: 5000,
                 type: "success"
             })
+            await unProcessedImageStore.getUnProcessedImage();
             prepocessingOverlay.value = false   
         }
     } catch (err) {
